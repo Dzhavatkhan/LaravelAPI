@@ -20,6 +20,6 @@ use Illuminate\Support\Facades\Route;
 // });
 // Route::middleware('auth:guest', function(){
     Route::post('auth/registration', [AuthController::class, 'registration'])->name("registration");
-    Route::post('auth/log in', [AuthController::class, 'login'])->name("log in");
+    Route::get('auth/login', [AuthController::class, 'login'])->name("login");
 // });
 
