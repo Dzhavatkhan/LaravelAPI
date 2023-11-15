@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartPayController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,8 +21,14 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-// Route::middleware('auth:guest', function(){
-    Route::post('auth/registration', [AuthController::class, 'registration'])->name("registration");
-    Route::get('auth/login', [AuthController::class, 'login'])->name("login");
+
+
+// Route::middleware('auth:web')->group(function() {
+    // Route::get('profile', [UserController::class, 'index'])->name('profile');
+    Route::get('cart', [CartPayController::class, 'cart'])->name('cart');
+    Route::get('orders', [CartPayController::class, 'orders'])->name('orders');
+
+
+
 // });
 

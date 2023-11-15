@@ -40,9 +40,9 @@
       
       <div class="container">
         <h2>login</h2>
-        <form action="{{ route('login') }}" method="POST">
+        <form action="{{ route('login') }}" enctype="multipart/form-data" method="POST">
           @csrf
-          <input type="text"  name="email" class="email" placeholder="email">
+          <input type="text"  name="email" class="email" value="{{ old('email') }}" placeholder="email">
           <br />
           <input type="password" name="password" class="pwd" placeholder="password">
 

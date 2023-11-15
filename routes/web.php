@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\AuthController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $products = Product::all();
+    return view('welcome', compact('products'));
 })->name('/');
 Route::get('auth/registration', function () {
     return view('auth.registration');
@@ -22,3 +26,8 @@ Route::get('auth/registration', function () {
 Route::get('auth/login', function () {
     return view('auth.login');
 });
+Route::get('auth/registration-process', [AuthController::class, 'registration'])->name("registration");
+Route::post('auth/login-process', [AuthController::class, 'login'])->name("login");
+
+
+Route::get('{email}/api/profile', [UserController::class, 'index'])->name('profile');
