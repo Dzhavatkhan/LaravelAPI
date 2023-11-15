@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Home</title>
+    @vite('resources/css/app.css')
 </head>
 <body>
     <header>
@@ -13,12 +14,13 @@
     <main>
         <section class="products">
             @foreach ($products as $product)
-                <div class="product-card">
-                    <h4>{{ $product->name }}</h4>
-                    <p>{{ $product->category }}</p>
-                    <p>{{ $product->price }} ₽</p>
-                    <button class="add_cart">Добавить в корзину</button>
-                </div>
+            <div class="card">
+                <img src="/w3images/jeans3.jpg" alt="Denim Jeans" style="width:100%">
+                <h1>{{ $product->name }}</h1>
+                <p class="price">$ {{ $product->price }}</p>
+                <p>{{$product->category}}</p>
+                <p><button>Buy</button></p>
+            </div>
             @endforeach
         </section>
     </main>

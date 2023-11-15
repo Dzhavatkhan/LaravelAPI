@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CartPayController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\AuthController;
 use App\Models\Product;
@@ -31,3 +32,6 @@ Route::post('auth/login-process', [AuthController::class, 'login'])->name("login
 
 
 Route::get('{email}/api/profile', [UserController::class, 'index'])->name('profile');
+Route::get('{email}/api/cart', [CartPayController::class, 'cart'])->name('cart');
+Route::get('{email}/api/orders', [CartPayController::class, 'orders'])->name('orders');
+Route::get('', [CartPayController::class, 'json_request_cart'])->name('json-request-cart');

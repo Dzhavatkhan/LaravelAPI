@@ -25,8 +25,8 @@ use Illuminate\Support\Facades\Route;
 
 // Route::middleware('auth:web')->group(function() {
     // Route::get('profile', [UserController::class, 'index'])->name('profile');
-    Route::get('cart', [CartPayController::class, 'cart'])->name('cart');
-    Route::get('orders', [CartPayController::class, 'orders'])->name('orders');
+    // Route::get('cart', [CartPayController::class, 'cart'])->name('cart');
+    // Route::get('orders', [CartPayController::class, 'orders'])->name('orders');
 
 
 

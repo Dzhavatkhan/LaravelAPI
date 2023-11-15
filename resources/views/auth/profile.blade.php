@@ -9,7 +9,7 @@
 </head>
 <style>
     * {box-sizing: border-box}
-    
+
     /* Set height of body and the document to 100% */
     body, html {
       height: 100%;
@@ -56,11 +56,11 @@
       font-size: 17px;
       width: 25%;
     }
-    
+
     .tablink:hover {
       background-color: #777;
     }
-    
+
     /* Style the tab content (and add height:100% for full page content) */
     .tabcontent {
       color: black;
@@ -68,7 +68,7 @@
       padding: 100px 20px;
       height: 100%;
     }
-    
+
     #Cart{
         background-color: whitesmoke;
         padding-left: 150px;
@@ -88,31 +88,31 @@
     </style>
     </head>
     <body>
-    
-    <button class="tablink" onclick="openPage('Cart', this, 'red')">Cart</button>
-    <button class="tablink" onclick="openPage('Order', this, 'green')" id="defaultOpen">Order</button>
+
+    <button class="tablink" onclick="openPage('Cart', this, 'red')" id="defaultOpen">Cart</button>
+    <button class="tablink" onclick="openPage('Order', this, 'green')">Order</button>
     <button class="tablink" onclick="openPage('Contact', this, 'blue')">Contact</button>
     <button class="tablink" onclick="openPage('About', this, 'orange')">About</button>
-    
+
     <div id="Cart" class="tabcontent">
 
     </div>
-    
+
     <div id="Order" class="tabcontent">
       <h3>{{ $user->name }}</h3>
-      <p>Some news this fine day!</p> 
+      <p>Some news this fine day!</p>
     </div>
-    
+
     <div id="Contact" class="tabcontent">
       <h3>Contact</h3>
       <p>Get in touch, or swing by for a cup of coffee.</p>
     </div>
-    
+
     <div id="About" class="tabcontent">
       <h3>About</h3>
       <p>Who we are and what we do.</p>
     </div>
-    
+
     <script>
     function openPage(pageName,elmnt,color) {
       var i, tabcontent, tablinks;
@@ -127,29 +127,33 @@
       document.getElementById(pageName).style.display = "block";
       elmnt.style.backgroundColor = color;
     }
-    
+
     // Get the element with id="defaultOpen" and clickCart on it
     document.getElementById("defaultOpen").click();
-    // $(document).ready(function () {
-    //    getCart(); 
-    // });
-    // function getCart(){
-    //     let cart = "cart"
-    //     let product_id = {{ Auth::user()->id }}
-    // $.ajax({
-    //     type: "GET",
-    //     url: "{{ route('cart', Auth::user()->email) }}",
-    //     data:  { cart:cart, product_id:product_id },
-    //     processData: false,
-    //     cache: false,
-    //     success: function (response, data) {
-    //         console.log(response);
-    //         $('#Cart').html(data);
-    //     },
-    //     error: function (response){
-    //         console.log(response);
-    //       }
-    // });
-    // }
+     $(document).ready(function () {
+       getCart();
+     });
+     function getCart(){
+         let cart = "cart"
+         let product_id = {{ Auth::user()->id }}
+     $.ajax({
+         type: "GET",
+         url: "{{ route('cart', Auth::user()->email) }}",
+         data:  { cart:cart, product_id:product_id },
+         contentType: false,
+         processData: false,
+         success: function (data) {
+            $.getJSON("{{route('json-request-cart')}}",
+                function (response, textStatus, jqXHR) {
+                    console.log(response);
+                }
+            );
+             $('#Cart').html(data);
+         },
+         error: function (data){
+             console.log(data);
+           }
+     });
+    }
     </script>
 </html>
