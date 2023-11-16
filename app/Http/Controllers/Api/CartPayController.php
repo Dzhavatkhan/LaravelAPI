@@ -23,7 +23,7 @@ class CartPayController extends Controller
     {
         // $user = Auth::user();
         $user_id = Auth::user()->id;
-        $carts = DB::select("SELECT products.*, carts.quantity FROM products LEFT JOIN carts ON products.id = carts.product_id WHERE carts.user_id = $user_id");
+        $carts = DB::select("SELECT products.*, carts.quantity, carts.id AS 'cart_id' FROM products LEFT JOIN carts ON products.id = carts.product_id WHERE carts.user_id = $user_id");
         $cart_count = DB::table('products')->leftJoin('carts', 'products.id', '=', 'carts.product_id')->where('user_id', $user_id)->count();
         // if ($cart_count > 0) {
         //     return response()->json("lalo");
@@ -31,10 +31,7 @@ class CartPayController extends Controller
         // $response = ["response" => "lalo"];
         return view('ajax_blade.profile.cart', compact('carts', 'cart_count', 'user_id'));
         //->with(response()->json("lalo"))
-        $response = [
-            'code' => 403,
-            'message' => 'Гостевой доступ запрещён'
-        ];
+
 
     }
     public function json_request_cart(){
@@ -55,15 +52,14 @@ class CartPayController extends Controller
     {
 
         $user_id = Auth::user()->id;
-        $orders = DB::select("SELECT products.* FROM products LEFT JOIN carts ON products.id = carts.product_id LEFT JOIN orders ON carts.id = orders.cart_id WHERE orders.user_id = $user_id");
+        $orders = DB::select("SELECT products.*, orders.quantity AS 'quantity', orders.quantity * price AS order_price FROM products LEFT JOIN carts ON products.id = carts.product_id LEFT JOIN orders ON carts.id = orders.cart_id WHERE orders.user_id = $user_id");
         $order_count = DB::table('products')->leftJoin('carts', 'products.id', '=', 'carts.product_id')->leftJoin('orders', 'carts.id', 'orders.cart_id')->where('orders.user_id', $user_id)->count();
         // if ($cart_count > 0) {
         //     return response()->json("lalo");
         // }
-        
-        $price = DB::select(" SELECT DISTINCT SUM(products.price * orders.quantity) AS 'SUM' FROM products LEFT JOIN carts ON products.id = carts.product_id LEFT JOIN orders ON carts.id = orders.cart_id WHERE orders.user_id = $user_id");
-        $price = DB::table('products')->leftJoin('carts', 'products.id', '=', 'carts.product_id')->leftJoin('orders', 'carts.id', 'orders.cart_id')->where('orders.user_id', $user_id)->sum("orders.quantity * products.price")->first();
-        return view('ajax_blade.profile.orders', compact('orders', 'price', 'order_count', 'user_id'));
+        $days = rand(1, 7);
+        // $price = DB::select(" SELECT DISTINCT SUM(products.price * orders.quantity) AS 'SUM' FROM products LEFT JOIN carts ON products.id = carts.product_id LEFT JOIN orders ON carts.id = orders.cart_id WHERE orders.user_id = $user_id");
+        return view('ajax_blade.profile.orders', compact('orders', 'days', 'order_count', 'user_id'));
 
     }
 
@@ -73,7 +69,7 @@ class CartPayController extends Controller
     public function addCart(Request $request)
     {
         $product_id = $request->id;
-        $product_cart = Cart::all()->where('product_id', $product_id)->where("user_id", Auth::user()->id)->first(); 
+        $product_cart = Cart::all()->where('product_id', $product_id)->where("user_id", Auth::user()->id)->first();
         if ($product_cart == null  || $product_cart->count() == "null") {
             $add = Cart::create([
                 "user_id" => Auth::user()->id,
@@ -107,7 +103,7 @@ class CartPayController extends Controller
             $quantity = $cart->quantity - 1;
             Cart::query()->where("user_id", $user->id)->where("product_id", $product_id)->update(["quantity" => $quantity]);
         }
-        
+
         return response()->json([
             "delete product in cart" =>  [
                 "status" => 200,
@@ -119,7 +115,6 @@ class CartPayController extends Controller
     public function addOrder(Request $request){
         $cart_id = $request->id;
         $user = Auth::user();
-        $days = rand(1, 7);
         $order = Order::query()->where("user_id", $user->id)->where("cart_id", $cart_id)->first();
         if ($order == null) {
             Order::create([
@@ -128,8 +123,10 @@ class CartPayController extends Controller
                 "quantity" => 1
             ]);
         }
-        $quantity = $order->quantity + 1;
-        $order->update(["quantity" => $quantity]);
+        else{
+            $quantity = $order->quantity + 1;
+            $order->update(["quantity" => $quantity]);
+        }
 
         return response()->json([
             "add order" => [

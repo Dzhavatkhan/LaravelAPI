@@ -13,7 +13,13 @@
         <nav>
             <ul>
                 <li>
-                    <a href="{{ route('profile', Auth::user()->email) }}">Профиль</a>
+
+                    @guest
+                        <a href="{{ route('login')}}">Войти</a>
+                    @endguest
+                    @auth
+                        <a href="{{ route('profile', Auth::user()->email) }}">Войти</a>
+                    @endauth
                 </li>
                 <li>
 
@@ -31,7 +37,12 @@
                 <h1>{{ $product->name }}</h1>
                 <p class="price">$ {{ $product->price }}</p>
                 <p>{{$product->category}}</p>
+                @guest
+                <p><button onclick="window.location.replace('/auth/login');">Добавить</button></p>
+                @endguest
+                @auth
                 <p><button onclick="addCart({{ $product->id }})">Добавить</button></p>
+                @endauth
             </div>
             @endforeach
         </section>
@@ -39,22 +50,26 @@
     <footer>
 
     </footer>
-    <script>
-        function addCart(id){
-            $.ajax({
-                type: "GET",
-                url: "{{ route('addCart', Auth::user()->email) }}",
-                data: {id:id},
-                success: function (response) {
-                    console.log(response, id);
-                    console.log(1);
-                },
-                error: function(response){
-                    console.log(response, id);
-                }
-            });
-        }
 
-    </script>
+    @auth
+        <script>
+            function addCart(id){
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('addCart', Auth::user()->email) }}",
+                    data: {id:id},
+                    success: function (response) {
+                        console.log(response, id);
+                        alert("Product already in your cart!")
+                    },
+                    error: function(response){
+                        console.log(response, id);
+                    }
+                });
+            }
+
+        </script>
+    @endauth
+
 </body>
 </html>

@@ -6,10 +6,9 @@
 @csrf
     <div class="card">
         <h1>{{ $order->name }}</h1>
-        <p class="price">$ {{ $price->SUM}}</p>
+        <p class="price">$ {{ $order->order_price}}</p>
         <p>{{ $order->quantity }} шт</p>
-        <p><button onclick="addOrder({{ $order->id }})">Buy</button></p>
-        <p><button class="delete" onclick="deleteCart({{ $order->id }})">Delete</button></p>
-    </div>            
-@endforeach 
+        <p>Дни ожидания: {{$days}}</p>
+    </div>
+@endforeach
 @endif

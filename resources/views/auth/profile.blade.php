@@ -181,7 +181,7 @@
         cache:false,
         success: function (response) {
           console.log(response);
-          getCart();
+          getOrders();
         }
       });
     }

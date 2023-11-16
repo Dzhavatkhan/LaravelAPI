@@ -8,8 +8,8 @@
         <h1>{{ $cart->name }}</h1>
         <p class="price">$ {{ $cart->price }}</p>
         <p>{{ $cart->quantity }} шт</p>
-        <p><button onclick="addOrder({{ $cart->id }})">Buy</button></p>
-        <p><button class="delete" onclick="deleteCart({{ $cart->id }})">Delete</button></p>
-    </div>            
-@endforeach 
+        <p><button onclick="addOrder({{ $cart->cart_id }})">Buy</button></p>
+        <p><button class="delete" onclick="deleteCart({{ $cart->cart_id }})">Delete</button></p>
+    </div>
+@endforeach
 @endif
