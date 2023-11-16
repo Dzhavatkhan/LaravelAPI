@@ -17,11 +17,11 @@
       font-family: Arial;
     }
     .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
-  font-family: arial;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      max-width: 300px;
+      margin: auto;
+      text-align: center;
+      font-family: arial;
 }
 
 .price {
@@ -39,6 +39,9 @@
   cursor: pointer;
   width: 100%;
   font-size: 18px;
+}
+.card .delete{
+  background-color: red;
 }
 
 .card button:hover {
@@ -132,6 +135,7 @@
     document.getElementById("defaultOpen").click();
      $(document).ready(function () {
        getCart();
+       getOrders();
      });
      function getCart(){
          let cart = "cart"
@@ -149,6 +153,55 @@
                 }
             );
              $('#Cart').html(data);
+         },
+         error: function (data){
+             console.log(data);
+           }
+     });
+    }
+    function deleteCart(id){
+      $.ajax({
+        type: "GET",
+        url: "{{ route('deleteCart', Auth::user()->email) }}",
+        data: {id:id},
+        success: function (response) {
+            console.log(response);
+            getCart();
+        },
+        error: function (response){
+
+        }
+      });
+    }
+    function addOrder(id){
+      $.ajax({
+        type: "GET",
+        url: "{{ route('addOrder', Auth::user()->email) }}",
+        data: {id:id},
+        cache:false,
+        success: function (response) {
+          console.log(response);
+          getCart();
+        }
+      });
+    }
+
+    function getOrders(){
+         let cart = "cart"
+         let product_id = {{ Auth::user()->id }}
+     $.ajax({
+         type: "GET",
+         url: "{{ route('orders', Auth::user()->email) }}",
+         data:  { cart:cart, product_id:product_id },
+         contentType: false,
+         processData: false,
+         success: function (data) {
+            // $.getJSON("{{route('json-request-cart')}}",
+            //     function (response, textStatus, jqXHR) {
+            //         console.log(response);
+            //     }
+
+             $('#Order').html(data);
          },
          error: function (data){
              console.log(data);
