@@ -39,7 +39,7 @@
       </svg>
       
       <div class="container">
-        <h2>login</h2>
+        <h2>Авторизация</h2>
         <form action="{{ route('login') }}" enctype="multipart/form-data" method="POST">
           @csrf
           <input type="text"  name="email" class="email" value="{{ old('email') }}" placeholder="email">
@@ -49,10 +49,10 @@
 
         <br />
         <button class="register">
-          <span><a href="{{ route('registration') }}" style="text-decoration: none; color:white">register</a></span>
+          <span><a href="{{ route('reg-view') }}" style="text-decoration: none; color:white">Зарегистрироваться</a></span>
         </button>
         <button class="signin">
-          <span>sign in</span>
+          <span>Войти</span>
         </button>
     </form>
         <h3>your registration is complete ! </h3>

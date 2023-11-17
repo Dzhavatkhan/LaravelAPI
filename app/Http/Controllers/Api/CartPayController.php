@@ -25,11 +25,12 @@ class CartPayController extends Controller
         $user_id = Auth::user()->id;
         $carts = DB::select("SELECT products.*, carts.quantity, carts.id AS 'cart_id' FROM products LEFT JOIN carts ON products.id = carts.product_id WHERE carts.user_id = $user_id");
         $cart_count = DB::table('products')->leftJoin('carts', 'products.id', '=', 'carts.product_id')->where('user_id', $user_id)->count();
+        $sum_price = DB::table('products')->leftJoin('carts', 'products.id', '=', 'carts.product_id')->where('user_id', $user_id)->sum('price');
         // if ($cart_count > 0) {
         //     return response()->json("lalo");
         // }
         // $response = ["response" => "lalo"];
-        return view('ajax_blade.profile.cart', compact('carts', 'cart_count', 'user_id'));
+        return view('ajax_blade.profile.cart', compact('carts', 'sum_price', 'cart_count', 'user_id'));
         //->with(response()->json("lalo"))
 
 
@@ -95,13 +96,13 @@ class CartPayController extends Controller
 
         $product_id = $request->id;
         $user = Auth::user();
-        $cart = Cart::query()->where("user_id", $user->id)->where("product_id", $product_id)->first();
+        $cart = Cart::query()->where("id", $product_id)->first();
         if ($cart->quantity == 1) {
             $cart->delete();
         }
         else{
             $quantity = $cart->quantity - 1;
-            Cart::query()->where("user_id", $user->id)->where("product_id", $product_id)->update(["quantity" => $quantity]);
+            $upd = Cart::query()->where("id", $product_id)->update(["quantity" => $quantity]);
         }
 
         return response()->json([

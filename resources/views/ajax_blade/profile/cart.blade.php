@@ -13,3 +13,5 @@
     </div>
 @endforeach
 @endif
+<br><br>
+<h4>Итого: $ {{ $sum_price }}</h4>

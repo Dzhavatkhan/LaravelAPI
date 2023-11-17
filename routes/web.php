@@ -20,12 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [CartPayController::class, 'index'])->name('home');
 Route::get('auth/registration', function () {
     return view('auth.registration');
-});
+})->name('reg-view');
 Route::get('auth/login', function () {
     return view('auth.login');
-});
-Route::get('auth/registration-process', [AuthController::class, 'registration'])->name("registration");
-Route::post('auth/login-process', [AuthController::class, 'login'])->name("login");
+})->name('login-view');
+Route::post('api/registration-process', [AuthController::class, 'registration'])->name("registration");
+Route::post('api/login-process', [AuthController::class, 'login'])->name("login");
 
 
 Route::get('{email}/api/profile', [UserController::class, 'index'])->name('profile');
