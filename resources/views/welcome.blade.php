@@ -15,7 +15,7 @@
                 <li>
 
                     @guest
-                        <a href="{{ route('login')}}">Войти</a>
+                        <a href="{{ route('login-view')}}">Войти</a>
                     @endguest
                     @auth
                         <a href="{{ route('profile', Auth::user()->email) }}">Войти</a>

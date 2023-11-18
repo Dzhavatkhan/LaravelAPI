@@ -27,8 +27,12 @@ use Illuminate\Support\Facades\Route;
     // Route::get('profile', [UserController::class, 'index'])->name('profile');
     // Route::get('cart', [CartPayController::class, 'cart'])->name('cart');
     // Route::get('orders', [CartPayController::class, 'orders'])->name('orders');
+    Route::post('registration-process', [AuthController::class, 'registration'])->name("registration");
+    Route::post('login-process', [AuthController::class, 'login'])->name("login");
 
-
-
+    Route::get('addCart', [CartPayController::class, 'addCart'])->name('addCart');
+    Route::get("deleteCart", [CartPayController::class, 'deleteCart'])->name('deleteCart');
+    Route::get('add order', [CartPayController::class, "addOrder"])->name('addOrder');
+    Route::get('json_request_cart', [CartPayController::class, 'json_request_cart'])->name('json-request-cart');
 // });
 
