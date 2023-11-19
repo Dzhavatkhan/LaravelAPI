@@ -92,10 +92,12 @@
     </head>
     <body>
 
+        <p>token: {{ $token}}</p>
+
     <button class="tablink" onclick="openPage('Cart', this, 'red')" id="defaultOpen">Cart</button>
     <button class="tablink" onclick="openPage('Order', this, 'green')">Order</button>
     <button class="tablink" onclick="openPage('Contact', this, 'blue')">Contact</button>
-    <button class="tablink" onclick="openPage('About', this, 'orange')">About</button>
+    <button class="tablink" ><a style="text-decoration: none; color:white;" href="{{route('logout')}}">Выйти</a></button>
 
     <div id="Cart" class="tabcontent">
 

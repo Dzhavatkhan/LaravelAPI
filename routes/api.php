@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
     // Route::get('orders', [CartPayController::class, 'orders'])->name('orders');
     Route::post('registration-process', [AuthController::class, 'registration'])->name("registration");
     Route::post('login-process', [AuthController::class, 'login'])->name("login");
+    Route::get("logout", [AuthController::class,"logout"])->name("logout");
 
     Route::get('addCart', [CartPayController::class, 'addCart'])->name('addCart');
     Route::get("deleteCart", [CartPayController::class, 'deleteCart'])->name('deleteCart');

@@ -37,27 +37,40 @@
         </linearGradient>
         <circle fill="url(#SVGID_5_)" cx="435.095" cy="184.986" r="63.504" />
       </svg>
-      
+
       <div class="container">
         <h2>Регистрация</h2>
         <form action="{{ route('registration') }}" enctype="multipart/form-data" method="POST">
           @csrf
           <input type="text"  name="name" class="email"  placeholder="name">
+          @error('name')
+                <p class="error">{{$message}}</p>
+          @enderror
           <br>
           <input type="text"  name="email" class="email"  placeholder="email">
+          @error('email')
+          <p class="error">{{$message}}</p>
+          @enderror
           <br />
           <input type="password" name="password" class="pwd" placeholder="password">
+          @error('password')
+          <p class="error">{{$message}}</p>
+          @enderror
 
 
 
         <br />
-        <button class="signin">
-            <span>
-                <a href="{{ route('login-view') }}" style="text-decoration: none; color:white">
+        <button class="signin" onclick="login()">
+
+
+            <a style="text-decoration: none;color:white;" href="{{route('login-view')}}">
+
                     Войти
-                </a>
-            </span>
+
+            </a>
+
           </button>
+
         <button class="register" type="submit">
           <span>Отправить</span>
         </button>
@@ -67,8 +80,12 @@
         <h3>your sign in is complete !</h3>
         <div class="reg"></div>
         <div class="sig"></div>
-      
+
       </div>
+
+      @error('email')
+      <p class="error">{{$message}}</p>
+      @enderror
 
 </body>
 </html>

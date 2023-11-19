@@ -37,19 +37,28 @@
         </linearGradient>
         <circle fill="url(#SVGID_5_)" cx="435.095" cy="184.986" r="63.504" />
       </svg>
-      
+
       <div class="container">
         <h2>Авторизация</h2>
         <form action="{{ route('login') }}" enctype="multipart/form-data" method="POST">
           @csrf
-          <input type="text"  name="email" class="email" value="{{ old('email') }}" placeholder="email">
+          <input type="text"  name="email" class="email" autocomplete="on" value="{{ old('email') }}" placeholder="email">
+          <br/>
+          @error('email')
+            <span style="color: #7853A8" class="error">{{ $message }}</span>
+          @enderror
           <br />
-          <input type="password" name="password" class="pwd" placeholder="password">
+          <input type="password" name="password" value="{{ old('password')}}"  class="pwd" placeholder="password">
+          <br>
+          @error('password')
+            <span class="error">{{ $message }}</span>
+
+          @enderror
 
 
         <br />
-        <button class="register">
-          <span><a href="{{ route('reg-view') }}" style="text-decoration: none; color:white">Зарегистрироваться</a></span>
+        <button class="register" onclick="reg()">
+          <a style="text-decoration: none; color:white;" href="{{route('reg-view')}}">Зарегистрироваться</a>
         </button>
         <button class="signin">
           <span>Войти</span>
@@ -59,8 +68,7 @@
         <h3>your sign in is complete !</h3>
         <div class="reg"></div>
         <div class="sig"></div>
-      
-      </div>
 
+      </div>
 </body>
 </html>

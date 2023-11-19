@@ -3,14 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthController extends Controller
 {
-    public function registration(Request $request){
+    public function registration(RegistrationRequest $request){
         $data = $request->all([
             "email",
             "name",
@@ -22,40 +25,48 @@ class AuthController extends Controller
             "password" => bcrypt($data['password'])
         ]);
         if ($user) {
-            $token = $user->createToken("user")->plainTextToken;
+            $token = $user->createToken($data["name"])->plainTextToken;
             auth('web')->login($user);
             return redirect()->route('profile', Auth::user()->email);
         }
 
     }
-    public function login(Request $request){
+    public function login(LoginRequest $request){
         $data = $request->all([
             "email",
             "password"
         ]);
 
         $password = bcrypt($data['password']);
+        // $password = $data['password'];
         $user = User::where("email", $data['email'])->first();
-        if (!$user || Hash::check($password, $user->password)) {
+        if (!$user || !Hash::check($data['password'], $user->password)) {
             return response()->json([
-                "login" => [
-                    "status" => 403,
+                "log in" => [
+                    "status" => 401,
                     "message" => "Bad creds"
                 ]
-            ]);
+            ], 401);
         }
         else{
-            return redirect(route('profile', $user->email));
+            // dd($data['password'], "1: ", Hash::check($data['password'], $user->password), "2: ", Hash::check($data['password'], bcrypt($user->password)));
+
+            $token = $user->createToken("$user->name")->plainTextToken;
+            if (auth('web')->attempt($data)) {
+                return redirect(route("profile", $user->email));
+            }
 
         }
         }
 
-    // public function logout(){
-    //     auth()->user()->tokens()->delete();
-
-    //     return response()->json([
-    //         "status" => 200,
-    //         "message" => "logged out"
-    //     ], 200);
-    // }
+        public function logout(){
+            $user = Auth::user();
+            $token = PersonalAccessToken::where("name", $user->name)->first()->token;
+            PersonalAccessToken::where("name", $user->name)->first()->delete();
+            auth('web')->logout();
+            return response()->json([
+                "status" => 200,
+                "message" => "logged out"
+            ], 200);
+        }
 }
