@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,22 +33,24 @@ class AuthController extends Controller
         }
 
     }
-    public function login(LoginRequest $request){
-        $data = $request->all([
-            "email",
-            "password"
+    public function login(Request $request){
+        $data = $request->validate([
+            "email" => ["required", "email"],
+            "password" => ["required", "string"]
         ]);
-
         $password = bcrypt($data['password']);
         // $password = $data['password'];
         $user = User::where("email", $data['email'])->first();
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            return response()->json([
-                "log in" => [
-                    "status" => 401,
-                    "message" => "Bad creds"
-                ]
-            ], 401);
+            // return response()->json([
+            //     "log in" => [
+            //         "status" => 401,
+            //         "message" => "Bad creds"
+            //     ]
+            // ], 401);
+            return redirect()->back()->withErrors([
+                "email" => "Пользователь не найден, либо данные были введены неверно"
+            ]);
         }
         else{
             // dd($data['password'], "1: ", Hash::check($data['password'], $user->password), "2: ", Hash::check($data['password'], bcrypt($user->password)));
@@ -54,6 +58,9 @@ class AuthController extends Controller
             $token = $user->createToken("$user->name")->plainTextToken;
             if (auth('web')->attempt($data)) {
                 return redirect(route("profile", $user->email));
+            }
+            else{
+
             }
 
         }

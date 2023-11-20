@@ -18,6 +18,7 @@
     }
     .card {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+      background-color: white;
       max-width: 300px;
       margin: auto;
       text-align: center;
@@ -91,8 +92,6 @@
     </style>
     </head>
     <body>
-
-        <p>token: {{ $token}}</p>
 
     <button class="tablink" onclick="openPage('Cart', this, 'red')" id="defaultOpen">Cart</button>
     <button class="tablink" onclick="openPage('Order', this, 'green')">Order</button>

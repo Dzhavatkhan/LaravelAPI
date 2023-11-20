@@ -40,16 +40,14 @@
 
       <div class="container">
         <h2>Авторизация</h2>
-        <form action="{{ route('login') }}" enctype="multipart/form-data" method="POST">
+        <form action="{{ route('login') }}" enctype="multipart/form-data" method="post">
           @csrf
-          <input type="text"  name="email" class="email" autocomplete="on" value="{{ old('email') }}" placeholder="email">
-          <br/>
+          <input type="text"  name="email" class="email" autocomplete="off" value="{{ old('email') }}" placeholder="email">
           @error('email')
-            <span style="color: #7853A8" class="error">{{ $message }}</span>
+            <h1 style="color: #7853A8" class="error">{{ $message }}</h1>
           @enderror
           <br />
           <input type="password" name="password" value="{{ old('password')}}"  class="pwd" placeholder="password">
-          <br>
           @error('password')
             <span class="error">{{ $message }}</span>
 
@@ -59,15 +57,12 @@
         <br />
         <button class="register" onclick="reg()">
           <a style="text-decoration: none; color:white;" href="{{route('reg-view')}}">Зарегистрироваться</a>
-        </button>
-        <button class="signin">
+        </button> 
+         <button type="submit" class="signin">
           <span>Войти</span>
         </button>
     </form>
-        <h3>your registration is complete ! </h3>
-        <h3>your sign in is complete !</h3>
-        <div class="reg"></div>
-        <div class="sig"></div>
+
 
       </div>
 </body>
