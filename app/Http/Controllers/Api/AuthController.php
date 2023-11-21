@@ -33,24 +33,27 @@ class AuthController extends Controller
         }
 
     }
-    public function login(Request $request){
-        $data = $request->validate([
-            "email" => ["required", "email"],
-            "password" => ["required", "string"]
-        ]);
+    public function login(LoginRequest $request){
+        $data = $request->validated();
+        if (!$request->validated()) {
+            return response()->json([
+                "message" => "Не соответсвтует требованиям"
+            ])->header("Conetnt-type","application/json");
+        }
+        
+
+
         $password = bcrypt($data['password']);
         // $password = $data['password'];
         $user = User::where("email", $data['email'])->first();
         if (!$user || !Hash::check($data['password'], $user->password)) {
-            // return response()->json([
-            //     "log in" => [
-            //         "status" => 401,
-            //         "message" => "Bad creds"
-            //     ]
-            // ], 401);
-            return redirect()->back()->withErrors([
-                "email" => "Пользователь не найден, либо данные были введены неверно"
-            ]);
+            return response()->json([
+                "log in" => [
+                    "status" => 401,
+                    "message" => "Неправильно введены данные или не найден пользователь"
+                ]
+            ], 401)->header("Conetnt-type","application/json");
+
         }
         else{
             // dd($data['password'], "1: ", Hash::check($data['password'], $user->password), "2: ", Hash::check($data['password'], bcrypt($user->password)));

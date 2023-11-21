@@ -34,7 +34,8 @@
         <section class="products">
             @foreach ($products as $product)
             <div class="card">
-                <h1>{{ $product->name }}</h1>
+                
+                <a style="text-decoration: none" href="{{ route('product', $product->id) }}"><h1>{{ $product->name }}</h1><a style="text-decoration: none" href="{{ route('product', $product->id) }}">
                 <p class="price">$ {{ $product->price }}</p>
                 <p>{{$product->category}}</p>
                 @guest
@@ -51,25 +52,7 @@
 
     </footer>
 
-    @auth
-        <script>
-            function addCart(id){
-                $.ajax({
-                    type: "GET",
-                    url: "{{ route('addCart', Auth::user()->email) }}",
-                    data: {id:id},
-                    success: function (response) {
-                        console.log(response, id);
-                        alert("Product already in your cart!")
-                    },
-                    error: function(response){
-                        console.log(response, id);
-                    }
-                });
-            }
 
-        </script>
-    @endauth
 
 </body>
 </html>

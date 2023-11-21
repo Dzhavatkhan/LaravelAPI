@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +8,10 @@
     <title>Авторизация</title>
 </head>
 <body>
+  @error('password')
+  fglsjdfglhsdfighsdiofhgsidf
+  <span class="error">{{ $message }}</span>
+  @enderror
     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="800px" height="600px" viewBox="0 0 800 600" enable-background="new 0 0 800 600" xml:space="preserve">
         <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="174.7899" y1="186.34" x2="330.1259" y2="186.34" gradientTransform="matrix(0.8538 0.5206 -0.5206 0.8538 147.9521 -79.1468)">
           <stop offset="0" style="stop-color:#FFC035" />
@@ -43,14 +47,15 @@
         <form action="{{ route('login') }}" enctype="multipart/form-data" method="post">
           @csrf
           <input type="text"  name="email" class="email" autocomplete="off" value="{{ old('email') }}" placeholder="email">
-          @error('email')
+          @error('email') 
+          fgghgfhgfh
             <h1 style="color: #7853A8" class="error">{{ $message }}</h1>
           @enderror
           <br />
-          <input type="password" name="password" value="{{ old('password')}}"  class="pwd" placeholder="password">
+          <input type="password" name="password" autocomplete="off"  class="pwd" placeholder="password">
           @error('password')
             <span class="error">{{ $message }}</span>
-
+hdgdfdfgdfgh
           @enderror
 
 

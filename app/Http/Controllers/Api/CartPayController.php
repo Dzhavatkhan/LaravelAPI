@@ -19,6 +19,7 @@ class CartPayController extends Controller
         $products = Product::all();
         return view('welcome', compact('products'));
     }
+    
     public function cart(Request $request)
     {
         // $user = Auth::user();
@@ -142,7 +143,10 @@ class CartPayController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        return view("product",[ 
+            "product" => $product
+        ]);
     }
 
     /**
