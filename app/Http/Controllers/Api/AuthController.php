@@ -29,7 +29,11 @@ class AuthController extends Controller
         if ($user) {
             $token = $user->createToken($data["name"])->plainTextToken;
             auth('web')->login($user);
-            return redirect()->route('profile', Auth::user()->email);
+            return response()->json([
+                "content" => [
+                    "user_token" => $token
+                ]
+                ],201)->header("Content-type", "application/json");
         }
 
     }
@@ -40,7 +44,8 @@ class AuthController extends Controller
                 "message" => "Не соответсвтует требованиям"
             ])->header("Conetnt-type","application/json");
         }
-        
+
+
 
 
         $password = bcrypt($data['password']);
@@ -48,8 +53,8 @@ class AuthController extends Controller
         $user = User::where("email", $data['email'])->first();
         if (!$user || !Hash::check($data['password'], $user->password)) {
             return response()->json([
-                "log in" => [
-                    "status" => 401,
+                "warning" => [
+                    "code" => 401,
                     "message" => "Неправильно введены данные или не найден пользователь"
                 ]
             ], 401)->header("Conetnt-type","application/json");
@@ -60,10 +65,11 @@ class AuthController extends Controller
 
             $token = $user->createToken("$user->name")->plainTextToken;
             if (auth('web')->attempt($data)) {
-                return redirect(route("profile", $user->email));
-            }
-            else{
-
+                return response()->json([
+                    "content"=> [
+                        "token" => $token
+                    ]
+                ]);
             }
 
         }

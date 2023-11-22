@@ -29,8 +29,8 @@ Route::get('auth/login', function () {
 
 
 Route::get('{email}/api/profile', [UserController::class, 'index'])->name('profile');
-Route::get("product/{id}", [CartPayController::class, "show"])->name('product');
-Route::get('api/orders', [CartPayController::class, 'orders'])->name('orders');
+Route::get("product/id{id}", [CartPayController::class, "show"])->name('product');
+Route::get('orders', [CartPayController::class, 'orders'])->name('orders');
 
 Route::get('api/cart', [CartPayController::class, 'cart'])->name('cart');
 
