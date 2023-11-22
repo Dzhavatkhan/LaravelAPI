@@ -6,21 +6,51 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Models\User;
+use Dotenv\Validator as DotenvValidator;
+use Illuminate\Auth\Events\Login;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
+
+use function Laravel\Prompts\error;
 
 class AuthController extends Controller
 {
     public function registration(RegistrationRequest $request){
-        $data = $request->all([
-            "email",
-            "name",
-            "password"
+        try{
+
+        
+        $data = $request->validate([
+            "email" => ['email', 'required'],
+            "name" =>  ['string', 'required'],
+            "password" =>  ['string', 'required']
         ]);
+    }
+    catch (ValidationException $expection) {
+        $errors = [];
+        foreach ($expection->errors() as $error => $messages) {
+            foreach($messages as $message){
+                $errors[] = [
+                    $err = $message
+                ];
+            }
+
+        }
+
+        return response()->json([
+            "warning" => [
+                "message" => "Несоответсвтие требованиям",
+                "warnings" => $err
+            ]
+            ],422)->header("Content-type", "application/json");
+    }
+
+
         $user = User::create([
             "email" => $data['email'],
             "name" => $data['name'],
@@ -37,15 +67,63 @@ class AuthController extends Controller
         }
 
     }
-    public function login(LoginRequest $request){
-        $data = $request->validated();
-        if (!$request->validated()) {
-            return response()->json([
-                "message" => "Не соответсвтует требованиям"
-            ])->header("Conetnt-type","application/json");
+    public function login(Request $request){
+       
+       try{
+            $data = $request->validate([
+                "email" => ['email', 'required'],
+                "password" => ['required', 'string']
+            ]);
+       }
+       catch(ValidationException $expection){
+
+        $errors = [];
+        foreach ($expection->errors() as $error => $messages) {
+            foreach($messages as $message){
+                $errors[] = [
+                    $err = $message
+                ];
+            }
+
         }
 
+        return response()->json([
+            "warning" => [
+                "message" => "Несоответсвтие требованиям",
+                "warnings" => $err
+            ]
+            ],422)->header("Content-type", "application/json");
+    }
 
+
+        // if (!isset($data['password'])) {
+        //     return response()->json([
+        //         "warning" => [
+        //             "code" => 403,
+        //             "message" => "Несоответсвтие требованиям",
+        //             "warning" => "Поле пароля пусто"
+        //         ]
+        //     ], 403)->header("Content-type","application/json");
+        // }
+        // if (!isset($data['email'])) {
+        //     return response()->json([
+        //         "warning" => [
+        //             "code" => 403,
+        //             "message" => "Несоответсвтие требованиям",
+        //             "warning" => "Поле почты пусто"
+        //         ]
+        //     ], 403)->header("Content-type","application/json");
+        // }
+        // if (!isset($data['email']) && !isset($data['password'])) {
+        //     return response()->json([
+        //         "warning" => [
+        //             "code" => 403,
+        //             "message" => "Несоответсвтие требованиям",
+        //             "warning" => "Поле почты пусто"
+        //         ]
+        //     ], 403)->header("Content-type","application/json");
+        // }
+    
 
 
         $password = bcrypt($data['password']);

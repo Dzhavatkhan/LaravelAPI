@@ -39,9 +39,9 @@ class CartPayController extends Controller
         // return view('ajax_blade.profile.cart', compact('carts', 'sum_price', 'cart_count', 'user_id'));
         return response()->json([
             "content" => [
-                "message" => "Товар в корзине"
+                 $carts
             ]
-            ],201)->header("Content-type", "application/json");;
+            ],201)->header("Content-type", "application/json");
 
 
     }
@@ -75,7 +75,7 @@ class CartPayController extends Controller
             "content" => [
                 $orders
             ]
-        ])->header("Content-type", "application/json");
+            ],201)->header("Content-type", "application/json");
     }
 
     /**
@@ -100,12 +100,11 @@ class CartPayController extends Controller
             $add = $product_cart->update(["quantity" => $quantity]);
         }
 
-            return response()->json([
-                "successfull" => [
-                        "status" => 200,
-                        "message" => "Product add into cart"
-                    ]
-                ], 200);
+        return response()->json([
+            "content" => [
+                "message" => "Товар в корзине"
+            ]
+            ],201)->header("Content-type", "application/json");
 
 
     }
